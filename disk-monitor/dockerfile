@@ -1,0 +1,10 @@
+#using official python
+FROM python:3.12-slim
+#seting working directory
+WORKDIR /app
+#copying code
+COPY disk_monitor.py .
+#no dependencies here to pip install
+#run command
+CMD ["python3" , "disk_monitor.py"]
+

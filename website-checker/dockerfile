@@ -1,0 +1,10 @@
+#fetch python
+FROM python:3.12-slim
+#create wrok directroy
+WORKDIR /app
+#copy code
+COPY website_checker.py .
+#install dependencies
+RUN pip install requests
+#run command
+CMD ["python3" , "website_checker.py"]
