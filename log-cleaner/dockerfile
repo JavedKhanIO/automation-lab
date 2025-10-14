@@ -1,0 +1,19 @@
+# Python installed
+FROM python:3.12-slim
+
+# Set working directory inside container
+WORKDIR /app
+
+# Copy the Python script
+COPY log_cleaner.py .
+
+# Set default logs folder inside container
+ENV CLEAN_FOLDER=/app/logs
+
+# Create logs folder
+RUN mkdir -p $CLEAN_FOLDER
+
+#CMD
+CMD ["python3", "log_cleaner.py"]
+
+
