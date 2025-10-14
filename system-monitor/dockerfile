@@ -1,0 +1,14 @@
+#fetching python
+FROM python:3.12-slim
+
+#making working directory
+WORKDIR /app
+
+#copying program
+COPY system_monitor.py .
+
+#download dependencies
+RUN pip install psutil
+
+#run the script
+CMD ["python3" , "system_monitor.py"]
