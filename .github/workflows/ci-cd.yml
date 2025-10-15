@@ -1,5 +1,6 @@
-name: Docker Nerworking CI/CD
+name: Docker Networking CI/CD
 
+# Trigger on push or pull request to main branch
 on:
   push:
     branches:
@@ -11,26 +12,34 @@ on:
 jobs:
   build-test:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@4
+      # 1. Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: set up docker
-        uses: docker/setup-buildx-action@v3
+      # 2. Set up Docker Buildx (for building multi-platform images if needed)
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-      - name: Build Docker Compose Services
+      # 3. Build Docker Compose services
+      - name: Build Docker Compose services
         run: docker compose build
 
-      - name: Run docker compose services
+      # 4. Run containers in detached mode
+      - name: Run Docker Compose services
         run: docker compose up -d
 
-      - name: Wait for aggregator to start
-        run: sleep 10  # gives containers a few seconds to start and write logs
+      # 5. Wait a few seconds for containers to start
+      - name: Wait for services
+        run: sleep 10
 
+      # 6. Test if aggregator is producing logs
       - name: Test aggregator output
         run: |
-          AGG_LOG=$(docker logs docker-networking-demo-aggregator-1 | tail -n 10)
-          if [[ -z "$AGG_LOG" ]]; then
+          echo "Checking aggregator logs..."
+          AGG_LOG=$(docker logs docker-networking-demo-aggregator-1 2>/dev/null | tail -n 10 || true)
+          if [ -z "$AGG_LOG" ]; then
             echo "Aggregator log is empty. CI failed."
             exit 1
           else
@@ -38,5 +47,6 @@ jobs:
             echo "$AGG_LOG"
           fi
 
-      - name: Stop and remove containers
+      # 7. Stop and remove containers
+      - name: Tear down Docker Compose
         run: docker compose down
