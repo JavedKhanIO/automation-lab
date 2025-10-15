@@ -1,0 +1,14 @@
+# fetching python
+FROM python:3.12-slim
+
+#make working directory
+WORKDIR /app
+
+#copy code
+COPY client.py .
+
+#download/install dependenciec
+RUN pip install requests
+
+#run command
+CMD ["python3" , "client.py"]
