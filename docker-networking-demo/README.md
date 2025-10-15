@@ -31,5 +31,5 @@ docker compose up
 
 # Screenshot
 
-![Docker Networking](./docker-networking.PNG)
+![Docker Networking](./docker_networking.PNG)
 
