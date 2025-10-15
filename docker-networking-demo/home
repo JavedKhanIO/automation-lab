@@ -40,3 +40,4 @@ jobs:
 
       - name: Stop and remove containers
         run: docker compose down
+

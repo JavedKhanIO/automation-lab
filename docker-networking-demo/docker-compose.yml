@@ -8,3 +8,4 @@ services:
     build: ./client
     depends_on:
       - server
+
