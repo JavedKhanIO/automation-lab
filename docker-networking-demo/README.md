@@ -6,7 +6,7 @@ This project demonstrates Docker networking using two services:
 - **Client**: A python script that handles requests to the server.
 The services communicate over a docker network using docker compose.
 
-## Tools
+## Tools we used
 - Python
 - Flask
 - Linux
