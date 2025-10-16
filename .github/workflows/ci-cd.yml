@@ -24,10 +24,12 @@ jobs:
 
       # 3. Build Docker Compose services
       - name: Build Docker Compose services
+        working-directory: ./docker-networking-demo
         run: docker compose build
 
       # 4. Run containers in detached mode
       - name: Run Docker Compose services
+        working-directory: ./docker-networking-demo
         run: docker compose up -d
 
       # 5. Wait a few seconds for containers to start
@@ -36,6 +38,7 @@ jobs:
 
       # 6. Test if aggregator is producing logs
       - name: Test aggregator output
+        working-directory: ./docker-networking-demo
         run: |
           echo "Checking aggregator logs..."
           AGG_LOG=$(docker logs docker-networking-demo-aggregator-1 2>/dev/null | tail -n 10 || true)
@@ -49,4 +52,5 @@ jobs:
 
       # 7. Stop and remove containers
       - name: Tear down Docker Compose
+        working-directory: ./docker-networking-demo
         run: docker compose down
