@@ -1,6 +1,5 @@
 name: Docker Networking CI/CD
 
-# Trigger on push or pull request to main branch
 on:
   push:
     branches:
@@ -10,47 +9,50 @@ on:
       - main
 
 jobs:
-  build-test:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout the repository
+      # Step 1: Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2. Set up Docker Buildx (for building multi-platform images if needed)
+      # Step 2: Set up Docker Buildx
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      # 3. Build Docker Compose services
+      # Step 3: Build Docker Compose services
       - name: Build Docker Compose services
         working-directory: ./docker-networking-demo
         run: docker compose build
 
-      # 4. Run containers in detached mode
+      # Step 4: Run containers
       - name: Run Docker Compose services
         working-directory: ./docker-networking-demo
-        run: docker compose -f docker-networking-demo/docker-compose.yml up -d
+        run: docker compose up -d
 
-      # 5. Wait a few seconds for containers to start
+      # Step 5: Wait for services to start
       - name: Wait for services
         run: sleep 10
 
-      # 6. Test if aggregator is producing logs
-      - name: Test aggregator output
-        working-directory: ./docker-networking-demo
+      # Step 6: Verify containers are running
+      - name: Check running containers
+        run: docker ps -a
+
+      # Step 7: Test client logs to verify communication
+      - name: Check client logs
         run: |
-          echo "Checking aggregator logs..."
-          AGG_LOG=$(docker logs docker-networking-demo-aggregator-1 2>/dev/null | tail -n 10 || true)
-          if [ -z "$AGG_LOG" ]; then
-            echo "Aggregator log is empty. CI failed."
+          echo "Checking client logs..."
+          CLIENT_LOGS=$(docker logs docker-networking-demo-client-1 2>/dev/null | tail -n 20 || true)
+          if [ -z "$CLIENT_LOGS" ]; then
+            echo "Client log is empty. Something might be wrong."
             exit 1
           else
-            echo "Aggregator is running and producing logs:"
-            echo "$AGG_LOG"
+            echo "Client logs:"
+            echo "$CLIENT_LOGS"
           fi
 
-      # 7. Stop and remove containers
-      - name: Tear down Docker Compose
+      # Step 8: Tear down containers
+      - name: Stop and remove containers
         working-directory: ./docker-networking-demo
         run: docker compose down
