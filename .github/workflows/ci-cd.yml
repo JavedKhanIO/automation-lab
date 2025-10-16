@@ -39,6 +39,21 @@ jobs:
       - name: Check running containers
         run: docker ps -a
 
+      #pinging the container to see the response
+      - name: ping the container
+        run: |
+          echo "pinging client container from server..."
+          SERVER_ID=$(docker ps -qf "name=server")
+          if [ -z "$SERVER_ID" ]; then
+            echo "server container not found."
+            docker ps -a 
+            exit 1
+           fi
+
+           PING_RESULT=$(docker exec "$SERVER_ID" curl -s https://client:5000/ping || echo "ping failed")
+          echo "ping result: $PING_RESULT"
+
+
       # Step 7: Test client logs to verify communication
       - name: Check client logs
         run: |
