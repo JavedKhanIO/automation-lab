@@ -1,0 +1,38 @@
+name: CI for multiapp demo
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+
+      - name: setup docker buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: build docker image
+        run: docker compose build
+
+      - name: run docker image
+        run: docker compose up -d
+
+      - name: check running containers
+        run: docker ps -a
+
+      - name: test app1 endpoints
+        run: |
+          echo "testing app1 endpoints..."
+          curl -f http://localhost:5001/number
+          echo "testing app2 endpoints..."
+          curl -f http://localhost:5002/result
+
+      - name: stop containers
+        if: always()
+        run: docker compose down
+
