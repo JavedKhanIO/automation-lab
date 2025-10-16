@@ -30,7 +30,7 @@ jobs:
       # 4. Run containers in detached mode
       - name: Run Docker Compose services
         working-directory: ./docker-networking-demo
-        run: docker compose up -d
+        run: docker compose -f docker-networking-demo/docker-compose.yml up -d
 
       # 5. Wait a few seconds for containers to start
       - name: Wait for services
