@@ -2,8 +2,16 @@ name: CI for multiapp demo
 on:
   push:
     branches: [ main ]
-  pull_request:
+    paths:
+      - 'multi-app-demo/**'
+      - '.github/workflows/multi-app-demo-ci.yml'
 
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'multi-app-demo/**'
+      - '.github/workflows/multi-app-demo-ci.yml'
 
 jobs:
   build-and-test:
