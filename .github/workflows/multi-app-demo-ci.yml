@@ -28,8 +28,10 @@ jobs:
       - name: test app1 endpoints
         run: |
           echo "testing app1 endpoints..."
+          sleep 5
           curl -f http://localhost:5001/number
           echo "testing app2 endpoints..."
+          sleep 10
           curl -f http://localhost:5002/result
 
       - name: stop containers
