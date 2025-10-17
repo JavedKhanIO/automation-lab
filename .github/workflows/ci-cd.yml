@@ -4,16 +4,17 @@ on:
   push:
     branches:
       - main
-     paths: 
+    paths:
       - 'docker-networking-demo/**'
       - '.github/workflows/ci-cd.yml'
 
   pull_request:
     branches:
       - main
-     paths:
+    paths:
       - 'docker-networking-demo/**'
       - '.github/workflows/ci-cd.yml'
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
@@ -45,22 +46,20 @@ jobs:
       - name: Check running containers
         run: docker ps -a
 
-      #pinging the container to see the response
-      - name: ping the container
+      # Step 7: Ping the container to see the response
+      - name: Ping the container
         run: |
-          echo "pinging client container from server..."
+          echo "Pinging client container from server..."
           SERVER_ID=$(docker ps -qf "name=server")
           if [ -z "$SERVER_ID" ]; then
-            echo "server container not found."
-            docker ps -a 
+            echo "Server container not found."
+            docker ps -a
             exit 1
-           fi
+          fi
+          PING_RESULT=$(docker exec "$SERVER_ID" curl -s http://client:5000/ping || echo "ping failed")
+          echo "Ping result: $PING_RESULT"
 
-           PING_RESULT=$(docker exec "$SERVER_ID" curl -s https://client:5000/ping || echo "ping failed")
-          echo "ping result: $PING_RESULT"
-
-
-      # Step 7: Test client logs to verify communication
+      # Step 8: Check client logs to verify communication
       - name: Check client logs
         run: |
           echo "Checking client logs..."
@@ -70,21 +69,19 @@ jobs:
             docker ps -a
             exit 1
           fi
-
           echo "Waiting for client logs..."
           sleep 20
           CLIENT_LOGS=$(docker logs "$CLIENT_ID" 2>/dev/null | tail -n 50 || true)
-
           echo "=== CLIENT LOGS ==="
           echo "$CLIENT_LOGS"
-
           if echo "$CLIENT_LOGS" | grep -qi "hello" || echo "$CLIENT_LOGS" | grep -qi "response"; then
             echo "✅ Communication successful!"
           else
             echo "⚠️ No response keyword found in logs yet. Test still passes for CI stability."
           fi
 
-      # Step 8: Tear down containers
+      # Step 9: Tear down containers
       - name: Stop and remove containers
         working-directory: ./docker-networking-demo
         run: docker compose down
+
