@@ -4,10 +4,16 @@ on:
   push:
     branches:
       - main
+     paths: 
+      - 'docker-networking-demo/**'
+      - '.github/workflows/ci-cd.yml'
+
   pull_request:
     branches:
       - main
-
+     paths:
+      - 'docker-networking-demo/**'
+      - '.github/workflows/ci-cd.yml'
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
