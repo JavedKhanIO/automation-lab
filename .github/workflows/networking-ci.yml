@@ -7,7 +7,7 @@ on:
       - 'networking/**'
       - '.github/workflows/networking-cd.yml'
 
-  pull_requests:
+  pull_request:
     branches:
       - main
     paths:
