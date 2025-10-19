@@ -1,0 +1,12 @@
+services:
+  hello:
+    build: ./server
+    ports:
+      - "5500:5500"
+
+  client:
+    build: ./client
+    depends_on:
+      - hello
+    volumes:
+      - ./client:/app

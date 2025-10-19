@@ -1,0 +1,47 @@
+name: build-and-run
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'networking/**'
+      - '.github/workflows/networking-cd.yml'
+
+  pull_requests:
+    branches:
+      - main
+    paths:
+      - 'networking/**'
+      - '.github/workflow/networking-cd.yml'
+
+
+jobs:
+  Build-and-run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: check out repo
+        uses: actions/checkout@v4
+
+      - name: run docker
+        uses: docker/setup-buildx-action@v2
+
+
+      - name: build docker compose
+        working-directory: ./practise/networking
+        run: docker compose build
+
+      - name: spin the container
+        working-directory: ./practise/networking
+        run: docker compose up -d
+
+      - name: wait for container
+        run: sleep 10
+
+      - name: check the running container
+        run: docker ps -a
+
+      - name: take down the container
+        run: docker compose down
+
+
