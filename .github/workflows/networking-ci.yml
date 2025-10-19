@@ -43,6 +43,7 @@ jobs:
         run: docker ps -a
 
       - name: take down the container
+        working-directory: ./practise/networking
         run: docker compose down
 
 
