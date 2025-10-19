@@ -4,15 +4,15 @@ on:
     branches:
       - main
     paths:
-      - 'networking/**'
-      - '.github/workflows/networking-cd.yml'
+      - 'practise/networking/**'
+      - '.github/workflows/networking-ci.yml'
 
   pull_request:
     branches:
       - main
     paths:
-      - 'networking/**'
-      - '.github/workflow/networking-cd.yml'
+      - 'practise/networking/**'
+      - '.github/workflows/networking-ci.yml'
 
   workflow_dispatch:
 
