@@ -22,11 +22,11 @@ jobs:
 
       - name: build docker image
         working-directory: ./system-automate
-        run: docker build -t system .
+        run: docker build -t system-monitor .
 
       - name: run docker image
         working-directory: ./system-automate
-        run: docker run -d system
+        run: docker run -d --name sysmon system-monitor
 
       - name: wait for image
         run: sleep 10
@@ -35,5 +35,5 @@ jobs:
         run: docker ps -a
 
       - name: take down image
-        working-directory: ./system-monitor
-        run: docker down system
+        working-directory: ./system-automate
+        run: docker stop sysmon && docker rm sysmon
