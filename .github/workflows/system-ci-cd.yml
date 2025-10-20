@@ -1,0 +1,41 @@
+name: system monitor
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'system-automate/**'
+      - '.github/workflows/system-ci-cd.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'system-automate/**'
+      - '.github/workflows/system-ci-cd.yml'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+      steps:
+        - name: checkout repo
+          uses: actions/checkout@v3
+        - name: start docker
+          uses: docker/setup-buildx-action@v2
+
+        - name: build docker image
+          working-directory: ./system-automate
+          run: docker build -t system .
+
+        - name: run docker image
+          working-directory: ./system-automate
+          run: docker run -d system
+
+        - name: wait for image
+          run: sleep 10
+
+        - name: check container
+          run: docker ps -a
+
+        - name: take down image
+          working-directory: ./system-monitor
+          run: docker down system
