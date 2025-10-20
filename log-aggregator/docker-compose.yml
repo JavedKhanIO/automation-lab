@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  app1:
+    build: ./app1
+    volumes:
+      - ./shared-logs:/app/logs.txt
+  app2:
+    build: ./app2
+    volumes:
+      - ./shared-logs:/app/logs.txt
+  aggregator:
+    build: ./aggregator
+    volumes:
+      - ./shared-logs:/app/logs.txt

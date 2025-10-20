@@ -1,0 +1,10 @@
+#fetch python
+FROM python:3.12-slim
+#setting work directory
+WORKDIR /app
+#copying code
+COPY app1.py .
+ENV PYTHONUNBUFFERED=1
+#running command
+CMD ["python3", "-u", "app1.py"]
+
