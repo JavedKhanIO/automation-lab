@@ -49,7 +49,7 @@ docker compose up --build -d
 docker compose logs -f aggregator
 ```
 ##Screenshot for local container run
-![Smart Monitor](./smart-monitor.PNG)
+![Smart Monitor](./smart_monitor.PNG)
 
 ✅ You should see alerts being logged and forwarded to your Telegram chat.
 
@@ -65,7 +65,7 @@ Loads Telegram secrets securely from GitHub
 
 Sends Telegram notifications if triggered
 ##Screenshot of Gitactions
-![Smart Monitor Cicd](./smart-monitor-cicd)
+![Smart Monitor Cicd](./smart-monitor-cicd.PNG)
 
 
 Steps:
@@ -93,7 +93,7 @@ git push origin main
 ✅ Sends Telegram alerts in both environments
 
 ##screenshot of telegram update
-![Smart Monitor Telegram](./smart-monitor-telegram.JPG)
+![Smart Monitor Telegram](./smart-monitor-telegram.jpg)
 
 📁 Folder Structure
 ```
