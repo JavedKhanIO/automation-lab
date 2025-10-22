@@ -33,6 +33,11 @@ jobs:
           ls -la
           cat .env
 
+      - name: Debug environment variables inside container
+        working-directory: ./smart-monitor
+        run: |
+          docker exec $(docker ps -qf "name=action-app") printenv | grep TELEGRAM
+
       - name: start the container
         working-directory: ./smart-monitor
         run: docker compose up --build -d
