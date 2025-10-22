@@ -4,6 +4,7 @@ services:
     container_name: redis
     ports:
       - "6379:6379"
+
   monitor-app:
     build:
       context: ./monitor-app
@@ -15,8 +16,9 @@ services:
       context: ./action-app
     depends_on:
       - redis
-    env_file:
-      - .env
+    environment:
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
 
   aggregator:
     build:
@@ -24,6 +26,7 @@ services:
     depends_on:
       - redis
     volumes:
-      - ./logs:/app/logs
-    env_file:
-      - .env
+      - ./logs:app/logs
+    environment:
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT TOKEN}
+      - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
