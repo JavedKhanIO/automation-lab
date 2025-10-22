@@ -58,7 +58,8 @@ jobs:
           CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           JOB_STATUS: ${{ job.status }}
         run: |
-          if [ "$JOB_STATUS" = "success" ]; then
+          STATUS="${JOB_STATUS,,}" #taking care of case sensitivity
+          if [ "$STATUS" = "success" ]; then
             MESSAGE="CI/CD success for smart monitor at $(date '+%Y-%m-%d %H:%M:%S')"
           else
             MESSAGE="CI/CD failed for smart monitor at $(date '+%Y-%m-%d %H:%M:%S')"
