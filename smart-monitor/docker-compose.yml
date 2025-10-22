@@ -1,0 +1,25 @@
+services:
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - "6379:6379"
+  monitor-app:
+    build:
+      context: ./monitor-app
+    depends_on:
+      - redis
+
+  action-app:
+    build:
+      context: ./action-app
+    depends_on:
+      - redis
+
+  aggregator:
+    build:
+      context: ./aggregator
+    depends_on:
+      - redis
+    volumes:
+      - ./logs:/app/logs
