@@ -24,6 +24,12 @@ jobs:
       - name: start docker
         uses: docker/setup-buildx-action@v2
 
+      - name: Create temp .env
+        run: |
+          echo "TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}" > ./smart-monitor/.env
+          echo "TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}" >> ./smart-monitor/.env
+
+
       - name: start the container
         working-directory: ./smart-monitor
         run: docker compose up --build -d
