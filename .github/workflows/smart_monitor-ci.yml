@@ -25,6 +25,7 @@ jobs:
         uses: docker/setup-buildx-action@v2
 
       - name: Create temp .env
+        working-directory: ./smart-monitor
         run: |
           echo "TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}" > ./smart-monitor/.env
           echo "TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}" >> ./smart-monitor/.env
