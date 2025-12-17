@@ -37,7 +37,7 @@ jobs:
 
           #test system endppoint
           echo "testing system endpoint..."
-          curl -f :http/localhost:5000/system
+          curl -f http//localhost:5000/system
 
       - name: destroy containert
         if: always()
