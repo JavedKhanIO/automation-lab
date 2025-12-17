@@ -1,0 +1,6 @@
+FROM python:3.9-slim
+WORKDIR /app
+COPY practice.py .
+RUN pip install --no-cache-dir Flask psutil
+EXPOSE 5000
+CMD ["python3", "practice.py"]

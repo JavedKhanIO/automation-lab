@@ -1,0 +1,46 @@
+name: ci pipeline
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'practice/**'
+      - ".github/workflows/practice.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - 'practice/**'
+      - ".github/workflows/practice.yml"
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: practice
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v3
+
+      - name: build docker image
+        run: docker build -t practice .
+
+      - name: run the container
+        run: |
+          docker run -d --name practice-api -p 5000:5000 practice
+          sleep 5
+
+      - name: test api endpoints
+        run: |
+          #test health endpoint
+          echo "testing /health endpoint..."
+          curl -f http://localhost:5000/health
+
+          #test system endppoint
+          echo "testing system endpoint..."
+          curl -f :http/localhost:5000/system
+
+      - name: destroy containert
+        if: always()
+        run: |
+          docker stop practice-api || true
+          docker rm practice-api || true
