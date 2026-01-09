@@ -8,18 +8,17 @@ containerized using Docker and automated with a scoped GitHub Actions CI pipelin
 It simulates a real-world scenario where a service periodically checks the availability and response
 latency of external websites and exposes the results through a REST API endpoint.
 
----
 
 🧰 Tools & Technologies
 
 - Python 3 — for building the API service
-- Flask — lightweight web framework for REST endpoints  
-- Requests — for performing HTTP health checks  
-- Docker — for containerizing the application  
-- GitHub Actions — for CI automation (build, test, cleanup)  
-- Linux (Ubuntu) — development and CI environment  
+- Flask — lightweight web framework for REST endpoints
+- Requests — for performing HTTP health checks
+- Docker — for containerizing the application 
+- GitHub Actions — for CI automation (build, test, cleanup)
+- Linux (Ubuntu) — development and CI environment
 
----
+```bash
 
 ⚙️ Architecture Overview
 
@@ -33,7 +32,7 @@ practice/webhealth/
 │ └── output-remote.PNG
 └── .github/workflows/
 └── webhealth-ci.yml
-
+```
 
 The API checks a predefined list of websites.
 
@@ -43,30 +42,31 @@ For each URL, it:
 - determines availability status
 - returns structured JSON output
 
----
 
 🚀 How to Run Locally
 
 ### Run without Docker
-```
+```bash
 pip install flask requests
 python app.py
 
 ```
 Access the API:
-```
+```bash
 http://localhost:5000/status
 ```
 
 Run with Docker:
-```
+
+```bash
 docker build -t website-health-api .
 docker run -p 5000:5000 website-health-api
+
 ```
 
 API output Preview:
 
-```
+```bash
 [
   {
     "url": "https://www.google.com",
@@ -75,6 +75,7 @@ API output Preview:
     "up": true
   }
 ]
+
 ```
 
 📸 Screenshots
@@ -97,7 +98,9 @@ API response accessed via browser at localhost:5000/status:
 This project uses a scoped CI pipeline with GitHub Actions.
 
 Workflow file: .github/workflows/webhealth-ci.yml
-```
+
+```bash
+
 Pipeline Stages
 
 Trigger: Runs only when files inside practice/webhealth/ change
