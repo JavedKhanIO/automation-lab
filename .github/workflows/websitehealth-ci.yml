@@ -30,7 +30,7 @@ jobs:
 
       - name: Syntax check
         run: |
-          python -m py_compile practice/webhealth/app.py
+          python -m compileall practice/webhealth
 
       - name: Build Docker image
         run: |

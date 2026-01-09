@@ -4,11 +4,14 @@ on:
     branches: [main]
     paths:
       - 'practice/**'
+      - '!practice/webhealth/**'
       - ".github/workflows/practice.yml"
+
   pull_request:
     branches: [main]
     paths:
       - 'practice/**'
+      - '!practice/webhealth/**'
       - ".github/workflows/practice.yml"
 jobs:
   build-and-test:
