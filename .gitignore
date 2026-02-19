@@ -1,2 +1,3 @@
 log-aggregator/
 smart-monitor/.env
+terraform/terraform.tfvars
