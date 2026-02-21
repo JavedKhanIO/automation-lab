@@ -21,6 +21,21 @@ jobs:
       - name: checkout repo
         uses: actions/checkout@v3
 
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        working-directory: ./smart-monitor/terraform
+        run: terraform init
+
+      - name: Terraform Validate
+        working-directory: ./smart-monitor/terraform
+        run: terraform validate
+
+      - name: Terraform Plan
+        working-directory: ./smart-monitor/terraform
+        run: terraform plan -input=false || true
+
       - name: start docker
         uses: docker/setup-buildx-action@v2
 

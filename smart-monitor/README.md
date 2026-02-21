@@ -1,160 +1,247 @@
-🧠 Smart Monitor – Automated Alert Aggregator with CI/CD & Telegram Notifications
-[![CI/CD Status](https://github.com/JavedKhanIO/automation-lab/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/JavedKhanIO/automation-lab/actions)
+# 🧠 Smart Monitor – Infrastructure as Code Based Alerting System with CI/CD & Telegram Integration
+
+[![CI/CD Status](https://github.com/JavedKhanIO/automation-lab/actions/workflows/smart_monitor-ci.yml/badge.svg)](https://github.com/JavedKhanIO/automation-lab/actions)
 [![Docker](https://img.shields.io/badge/Docker-Ready-blue?logo=docker)](https://www.docker.com/)
+[![Terraform](https://img.shields.io/badge/Terraform-IaC-purple?logo=terraform)](https://www.terraform.io/)
 [![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-Automated-black?logo=githubactions)](https://github.com/features/actions)
 
-🔍 Overview
+---
 
-Smart Monitor is a modular monitoring and alerting system that connects multiple components 
-using Redis Pub/Sub, aggregates logs, and sends real-time alerts directly to Telegram.
-It is fully containerized using Docker Compose and auto-deployed via GitHub Actions.
+## 🔍 Overview
 
-⚙️ Architecture
+Smart Monitor is a modular, containerized monitoring and alert aggregation system built using:
 
-##Core Components:
+- **Redis Pub/Sub for decoupled communication**
+- **Docker for containerization**
+- **Terraform (Infrastructure as Code) for container orchestration**
+- **GitHub Actions for CI validation**
+- **Telegram Bot API for real-time alert delivery**
 
-- monitor-app – Monitors system metrics or custom events. Publishes alerts to Redis.
+The project demonstrates practical DevOps lifecycle concepts including:
 
-- aggregator – Subscribes to Redis alerts channel, logs alerts, and forwards them to Telegram.
+- Infrastructure definition
+- Container networking
+- Secret management
+- CI validation
+- Runtime alerting
+- Environment consistency debugging
 
-- redis – Message broker enabling pub/sub communication.
+---
 
-- action-app – Optional CI/CD deployment & orchestration layer.
+## ⚙️ Architecture
 
-##Flow:
+### Core Components
+
+- **monitor-app**
+  Monitors system metrics and publishes events to Redis.
+
+- **action-app**  
+  Subscribes to alerts, evaluates thresholds, and triggers Telegram notifications.
+
+- **aggregator**  
+  Logs alerts using RotatingFileHandler.
+
+- **redis**  
+  Pub/Sub message broker.
+
+---
+
+### Architecture Flow
+
 ```
-monitor-app  →  Redis (alerts channel)  →  aggregator  →  Telegram Bot
+monitor-app → Redis (alerts channel) → action-app → Telegram
+                                      ↓
+                                   aggregator → log storage
 ```
 
-🚀 Local Setup (Development)
-1. Clone Repository
-```
-git clone https://github.com/<your-username>/automation-lab.git
-cd automation-lab/smart-monitor
-```
-2. Create .env File
+---
 
-Create .env in the smart-monitor/ folder:
+## 🏗 Infrastructure as Code (Terraform)
+
+The project migrated from docker-compose orchestration to **Terraform-managed infrastructure** using the Docker provider.
+
+### Terraform Responsibilities
+
+- Creates custom Docker network
+- Builds Docker images
+- Creates containers
+- Injects environment variables securely
+- Manages container lifecycle declaratively
+
+### Terraform Structure
+
 ```
-TELEGRAM_BOT_TOKEN=your_bot_token_here
-TELEGRAM_CHAT_ID=your_chat_id_here
+smart-monitor/
+└── terraform/
+    ├── main.tf
+    ├── variables.tf
+    └── terraform.tfvars (ignored)
 ```
-3. Run Locally
+
+- `main.tf` → Infrastructure resources (network, containers, images)
+- `variables.tf` → Input variable definitions
+- `terraform.tfvars` → Local secret values (gitignored)
+
+Secrets are never committed to GitHub.
+
+---
+
+## 🚀 Local Deployment (Terraform-Based)
+
+### 1️⃣ Clone Repository
+
+```
+git clone https://github.com/JavedKhanIO/automation-lab.git
+cd automation-lab/smart-monitor/terraform
+```
+
+### 2️⃣ Create terraform.tfvars
+
+```
+bot_token = "your_telegram_bot_token"
+chat_id   = "your_chat_id"
+```
+
+### 3️⃣ Deploy Infrastructure
+
+```
+terraform init
+terraform apply
+```
+
+Terraform will:
+
+- Create Docker network
+- Deploy Redis
+- Deploy monitor-app
+- Deploy action-app
+- Deploy aggregator
+
+### 4️⃣ Destroy Infrastructure
+
+```
+terraform destroy
+```
+
+---
+
+## 🐳 Development Mode (Docker Compose)
+
+For quick testing without Terraform:
+
 ```
 docker compose up --build -d
 ```
 
-4. Check Logs
-```
-docker compose logs -f aggregator
-```
-##Screenshot for local container run
-![Smart Monitor](./smart_monitor.PNG)
+---
 
-✅ You should see alerts being logged and forwarded to your Telegram chat.
+## ⚡ CI/CD (GitHub Actions)
 
-⚡ CI/CD Setup (GitHub Actions)
+On every push to `main`:
 
-The project includes a GitHub Actions pipeline that automatically:
+- Docker images are built
+- Terraform configuration is validated
+- Terraform plan is executed
+- Containers are tested using docker-compose
+- Logs are uploaded as artifacts
+- Telegram notification is sent for job status
 
-Builds the Docker image
+### Required GitHub Secrets
 
-Runs the entire stack using docker-compose
+Go to:
 
-Loads Telegram secrets securely from GitHub
-
-Sends Telegram notifications if triggered
-##Screenshot of Gitactions
-![Smart Monitor Cicd](./smart-monitor-cicd.PNG)
-
-
-Steps:
-
-Go to your GitHub repo → Settings → Secrets and variables → Actions → New Repository Secret
+GitHub → Settings → Secrets and variables → Actions
 
 Add:
 
-TELEGRAM_BOT_TOKEN
+- `TELEGRAM_BOT_TOKEN`
+- `TELEGRAM_CHAT_ID`
 
-TELEGRAM_CHAT_ID
+---
 
-Commit and push to trigger the workflow:
-```
-git add .
-git commit -m "Added CI/CD with Telegram alerts"
-git push origin main
-```
-🧪 Validation
+## 🧪 Validation
 
-✅ Works locally using .env
+✔ Redis Pub/Sub working  
+✔ Threshold-based alerting  
+✔ Telegram API integration  
+✔ Terraform network & container management  
+✔ CI validation of infrastructure  
+✔ Secret injection consistency  
 
-✅ Works on GitHub Actions using repository secrets
+---
 
-✅ Sends Telegram alerts in both environments
+## 📸 Screenshots
 
-##screenshot of telegram update
+### Local Run
+![Smart Monitor](./smart_monitor.PNG)
+
+### CI/CD Execution
+![Smart Monitor CI/CD](./smart-monitor-cicd.PNG)
+
+### Telegram Alert
 ![Smart Monitor Telegram](./smart-monitor-telegram.jpg)
 
-📁 Folder Structure
+---
+
+## 📁 Project Structure
+
 ```
 smart-monitor/
 │
-├── monitor-app/
-│   ├── monitor.py
-│   └── Dockerfile
+├── app/
+│   ├── monitor-app/
+│   ├── action-app/
+│   └── aggregator/
 │
-├── aggregator/
-│   ├── aggregator.py
-│   └── Dockerfile
-│
+├── logs/
 ├── docker-compose.yml
-├── .env (local only)
-├── .github/workflows/ci-cd.yml
-└── logs/
+├── terraform/
+│   ├── main.tf
+│   ├── variables.tf
+│   └── terraform.tfvars (ignored)
+│
+└── .github/workflows/
 ```
-🧩 Technologies Used
+
+---
+
+## 🧩 Technologies Used
 
 - Python 3
-
 - Redis (Pub/Sub messaging)
-
-- Docker & Docker Compose
-
-- GitHub Actions (CI/CD)
-
+- Docker
+- Terraform (Docker Provider)
+- GitHub Actions
 - Telegram Bot API
+- RotatingFileHandler (structured logging)
 
-- RotatingFileHandler for structured logs
+---
 
-🔑 Key Learnings
+## 🧠 Key DevOps Concepts Demonstrated
 
-- How to orchestrate multiple services using Docker Compose.
+- Infrastructure as Code (Terraform)
+- Custom Docker networking
+- Secret management via environment variables
+- Container lifecycle management
+- CI validation of infrastructure
+- Debugging environment drift between local and CI
+- Pub/Sub microservice architecture
+- Observability via structured logs
 
-- Using Redis Pub/Sub for decoupled communication between microservices.
+---
 
-- Logging best practices with RotatingFileHandler.
+## 🚀 Future Enhancements
 
-- Automating deployment and alerts with GitHub Actions.
+- Add Prometheus + Grafana monitoring stack
+- Deploy to AWS using Terraform AWS provider
+- Push Docker images to registry
+- Implement multi-environment infrastructure
+- Add health checks & container restart policies
 
-- Securely handling secrets for Telegram bot integration in CI/CD.
+---
 
-- Debugging Docker container environment variables and ensuring communication between services.
+## 👨‍💻 Author
 
-🚀 Possible Future Upgrades
+Javed Khan  
+DevOps | Infrastructure as Code | CI/CD | Cloud Automation
 
-- Add Web UI for real-time monitoring and metrics visualization.
-
-- Include email or Slack notifications as alternative alert channels.
-
-- Add dynamic threshold configuration stored in Redis or a DB.
-
-- Implement historical alert storage for analytics and reporting.
-
-- Add multi-environment support (dev, staging, production).
-
-- Integrate auto-scaling or cloud deployment using AWS/GCP.
-
-
-📝 Author
-
-Javed Khan

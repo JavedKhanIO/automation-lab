@@ -7,13 +7,13 @@ services:
 
   monitor-app:
     build:
-      context: ./monitor-app
+      context: ./app/monitor-app
     depends_on:
       - redis
 
   action-app:
     build:
-      context: ./action-app
+      context: ./app/action-app
     depends_on:
       - redis
     environment:
@@ -22,7 +22,7 @@ services:
 
   aggregator:
     build:
-      context: ./aggregator
+      context: ./app/aggregator
     depends_on:
       - redis
     volumes:
